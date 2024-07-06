@@ -1,0 +1,47 @@
+import subprocess
+import psutil
+ 
+# Define thresholds
+CPU_THRESHOLD = 80.0  # percentage
+MEMORY_THRESHOLD = 80.0  # percentage
+DISK_THRESHOLD = 80.0   # percentage
+ 
+def check_cpu_usage():
+    cpu_usage = psutil.cpu_percent(interval=1)
+    return cpu_usage > CPU_THRESHOLD, cpu_usage
+ 
+def check_memory_usage():
+    memory_usage = psutil.virtual_memory().percent
+    return memory_usage > MEMORY_THRESHOLD, memory_usage
+ 
+def check_disk_usage():
+    disk_usage = psutil.disk_usage('/').percent
+    return disk_usage > DISK_THRESHOLD, disk_usage
+ 
+def check_running_processes():
+processes = subprocess.run(['ps', 'aux'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    return processes.stdout
+ 
+def main():
+    # Check CPU usage
+    cpu_alert, cpu_usage = check_cpu_usage()
+    if cpu_alert:
+        print(f"CPU usage is {cpu_usage}%, which exceeds the threshold of {CPU_THRESHOLD}%")
+ 
+    # Check memory usage
+    memory_alert, memory_usage = check_memory_usage()
+    if memory_alert:
+        print(f"Memory usage is {memory_usage}%, which exceeds the threshold of {MEMORY_THRESHOLD}%")
+ 
+    # Check disk usage
+    disk_alert, disk_usage = check_disk_usage()
+    if disk_alert:
+        print(f"Disk usage is {disk_usage}%, which exceeds the threshold of {DISK_THRESHOLD}%")
+ 
+    # Check running processes (optional)
+    running_processes = check_running_processes()
+    print("Running processes:")
+    print(running_processes)
+ 
+if __name__ == "__main__":
+    main()
