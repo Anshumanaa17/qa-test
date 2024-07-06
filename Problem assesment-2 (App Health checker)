@@ -1,0 +1,32 @@
+import requests
+import time
+ 
+# Function to check the status of the application
+def check_application_status(url):
+    try:
+        response = requests.get(url)
+        # Check if the status code indicates a successful response (2xx)
+        if response.status_code // 100 == 2:
+            return 'up'
+        else:
+            return 'down'
+    except requests.exceptions.RequestException as e:
+        # If any exception occurs during the request (e.g., connection error), consider it as 'down'
+        return 'down'
+ 
+def main():
+    # URL of the application to monitor
+app_url = your application's URL
+ 
+    while True:
+        status = check_application_status(app_url)
+        if status == 'up':
+            print(f"Application is up at {time.ctime()}")
+        else:
+            print(f"Application is down at {time.ctime()}")
+ 
+        # Check every 60 seconds (adjust as needed)
+        time.sleep(60)
+ 
+if __name__ == "__main__":
+    main()
